@@ -1,0 +1,1 @@
+source_record_id,order_item_id,order_id,product_id,quantity,unit_price,discount_amount,tax_amount,line_total_amount,created_at,updated_at

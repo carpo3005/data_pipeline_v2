@@ -1,0 +1,31 @@
+batch_id,entity,source_record_id,business_key,defect_code,severity,expected_action,description
+B004,customer,nan,C0000032,CUST_NULL_SOURCE_RECORD_ID,HARD,QUARANTINE,Physical source_record_id is NULL.
+B004,customer,nan,C0000057,CUST_NULL_SOURCE_RECORD_ID,HARD,QUARANTINE,Physical source_record_id is NULL.
+B004,customer,nan,C0000048,CUST_NULL_SOURCE_RECORD_ID,HARD,QUARANTINE,Physical source_record_id is NULL.
+B004,customer,nan,C0000032,CUST_NULL_SOURCE_RECORD_ID_DUPLICATE,HARD,QUARANTINE,Duplicate physical record also carries a NULL source_record_id.
+B004,customer,nan,C0000057,CUST_NULL_SOURCE_RECORD_ID_DUPLICATE,HARD,QUARANTINE,Duplicate physical record also carries a NULL source_record_id.
+B004,product,DEF_PRODUCT_PRICE_B004_001,P_BAD_B004_001,PROD_NEGATIVE_PRICE,HARD,QUARANTINE,Product price is negative.
+B004,product,DEF_PRODUCT_PRICE_B004_002,P_BAD_B004_002,PROD_INVALID_PRICE_TYPE,HARD,QUARANTINE,Product price cannot be cast to a numeric value.
+B004,order,DEF_ORDER_BADDATE_B004_001,O_BADDATE_B004_001,ORD_INVALID_TIMESTAMP,HARD,QUARANTINE,Order timestamp cannot be parsed into a valid TimestampType.
+B004,order_item,DEF_ORDER_ITEM_QTY_B004_001,OI_BAD_B004_001,OI_INVALID_QUANTITY_TYPE,HARD,QUARANTINE,Quantity cannot be cast to integer.
+B004,order_item,DEF_ORDER_ITEM_ORPHAN_B004_001,OI_BAD_B004_002,OI_ORPHAN_ORDER,HARD,QUARANTINE,Order item references an unknown order.
+B004,customer,DEF_CUSTOMER_MALFORMED_B004_001,C0000001,CUST_MALFORMED_RAW_RECORD,HARD,QUARANTINE,Raw source line is not valid CSV (field-count/quote mismatch); expected to surface under Spark permissive-mode parsing.
+B004,order,DEF_ORDER_MALFORMED_B004_001,O_MALFORMED_B004_001,ORD_MALFORMED_RAW_RECORD,HARD,QUARANTINE,Raw source line is not valid CSV (field-count/quote mismatch); expected to surface under Spark permissive-mode parsing.
+B005,customer,SRC_CUSTOMER_B002_000000011,C0000061,CUSTOMER_SOURCE_ID_HASH_CONFLICT,HARD,FAIL_BATCH,source_record_id matches a previously ingested record but the recomputed content hash differs.
+B005,customer,SRC_CUSTOMER_B001_000000007,C0000007,CUSTOMER_SOURCE_ID_HASH_CONFLICT,HARD,FAIL_BATCH,source_record_id matches a previously ingested record but the recomputed content hash differs.
+B005,customer,SRC_CUSTOMER_B001_000000002,C0000002,CUSTOMER_SOURCE_ID_HASH_CONFLICT,HARD,FAIL_BATCH,source_record_id matches a previously ingested record but the recomputed content hash differs.
+B005,customer,SRC_CUSTOMER_B001_000000021,C0000021,CUSTOMER_SOURCE_ID_HASH_CONFLICT,HARD,FAIL_BATCH,source_record_id matches a previously ingested record but the recomputed content hash differs.
+B005,customer,SRC_CUSTOMER_B001_000000036,C0000036,CUSTOMER_SOURCE_ID_HASH_CONFLICT,HARD,FAIL_BATCH,source_record_id matches a previously ingested record but the recomputed content hash differs.
+B005,product,SRC_PRODUCT_B001_000000054,P000054,PRODUCT_SOURCE_ID_HASH_CONFLICT,HARD,FAIL_BATCH,source_record_id matches a previously ingested record but the recomputed content hash differs.
+B005,product,SRC_PRODUCT_B001_000000165,P000165,PRODUCT_SOURCE_ID_HASH_CONFLICT,HARD,FAIL_BATCH,source_record_id matches a previously ingested record but the recomputed content hash differs.
+B005,product,SRC_PRODUCT_B001_000000040,P000040,PRODUCT_SOURCE_ID_HASH_CONFLICT,HARD,FAIL_BATCH,source_record_id matches a previously ingested record but the recomputed content hash differs.
+B005,product,SRC_PRODUCT_B001_000000024,P000024,PRODUCT_SOURCE_ID_HASH_CONFLICT,HARD,FAIL_BATCH,source_record_id matches a previously ingested record but the recomputed content hash differs.
+B005,product,SRC_PRODUCT_B001_000000055,P000055,PRODUCT_SOURCE_ID_HASH_CONFLICT,HARD,FAIL_BATCH,source_record_id matches a previously ingested record but the recomputed content hash differs.
+B009,product,DEF_PRODUCT_CORRUPT_B009_001,P_BAD_B009_001,PROD_INVALID_PRICE,HARD,QUARANTINE,"Product price is negative, zero, or not numeric."
+B009,product,DEF_PRODUCT_CORRUPT_B009_002,P_BAD_B009_002,PROD_INVALID_PRICE,HARD,QUARANTINE,"Product price is negative, zero, or not numeric."
+B009,product,DEF_PRODUCT_CORRUPT_B009_003,P_BAD_B009_003,PROD_INVALID_PRICE,HARD,QUARANTINE,"Product price is negative, zero, or not numeric."
+B009,customer,SRC_CUSTOMER_B008_000000007,C0000112,CUSTOMER_SOURCE_ID_HASH_CONFLICT,HARD,FAIL_BATCH,source_record_id matches a previously ingested record but the recomputed content hash differs.
+B009,customer,SRC_CUSTOMER_B003_000000009,C0000074,CUSTOMER_SOURCE_ID_HASH_CONFLICT,HARD,FAIL_BATCH,source_record_id matches a previously ingested record but the recomputed content hash differs.
+B009,customer,SRC_CUSTOMER_B007_000000003,C0000098,CUSTOMER_SOURCE_ID_HASH_CONFLICT,HARD,FAIL_BATCH,source_record_id matches a previously ingested record but the recomputed content hash differs.
+B009,payment,DEF_PAYMENT_ORPHAN_B009_001,PAY_BAD_B009_001,PAY_ORPHAN_ORDER,HARD,QUARANTINE,Payment references an unknown order.
+B009,payment,DEF_PAYMENT_ORPHAN_B009_002,PAY_BAD_B009_002,PAY_ORPHAN_ORDER,HARD,QUARANTINE,Payment references an unknown order.

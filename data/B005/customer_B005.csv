@@ -1,0 +1,6 @@
+source_record_id,customer_id,first_name,last_name,email,phone,date_of_birth,loyalty_status,marketing_opt_in,created_at,updated_at
+SRC_CUSTOMER_B002_000000011,C0000061,Anthony,Richardson,conflict.958874@retailverse.example,+44 7979730753,1973-06-10,GOLD,N,2026-09-02 02:02:25,2026-09-02 02:02:25
+SRC_CUSTOMER_B001_000000007,C0000007,Bradley,Taylor,conflict.755749@retailverse.example,+44 7895755702,2003-02-12,NONE,Y,2025-08-08 21:48:53,2025-08-28 21:48:53
+SRC_CUSTOMER_B001_000000002,C0000002,Nathan,Simpson,conflict.407195@retailverse.example,+44 7019969788,1947-10-05,BRONZE,N,2024-12-25 16:18:08,2025-02-23 16:18:08
+SRC_CUSTOMER_B001_000000021,C0000021,Richard,Phillips,conflict.272303@retailverse.example,+44 7030052248,1988-03-31,SILVER,Y,2023-12-01 19:15:21,2024-01-20 19:15:21
+SRC_CUSTOMER_B001_000000036,C0000036,Maurice,Higgins,conflict.600828@retailverse.example,+44 7532773159,1997-06-06,BRONZE,Y,2023-05-04 13:29:51,2023-06-20 13:29:51

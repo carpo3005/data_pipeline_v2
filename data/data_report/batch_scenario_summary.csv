@@ -1,0 +1,10 @@
+batch_id,scenario
+B001,Clean initial load
+B002,Net-new records only
+B003,Partial overlap -- replay detection alongside new inserts
+B004,Corrupt / malformed records
+B005,"Hash conflicts (same source_record_id, different payload)"
+B006,Empty source file (order)
+B007,Missing entity file (return)
+B008,Schema drift
+B009,Mixed batch (clean + corrupt + conflicting)

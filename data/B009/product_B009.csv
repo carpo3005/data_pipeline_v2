@@ -1,0 +1,4 @@
+source_record_id,product_id,sku,product_name,brand,unit_price,currency_code,is_active,created_at,updated_at
+DEF_PRODUCT_CORRUPT_B009_001,P_BAD_B009_001,RV-000001,Everyday Headphones 0001,Meridian,-9.99,GBP,Y,2026-04-19 05:32:32,2026-04-22 05:32:32
+DEF_PRODUCT_CORRUPT_B009_002,P_BAD_B009_002,RV-000002,Smart Trainer 0002,Cinder,NOT_AVAILABLE,GBP,Y,2024-03-22 12:49:21,2024-06-04 12:49:21
+DEF_PRODUCT_CORRUPT_B009_003,P_BAD_B009_003,RV-000003,Compact Keyboard 0003,Orbis,0.00,GBP,Y,2023-03-07 12:56:57,2023-03-12 12:56:57

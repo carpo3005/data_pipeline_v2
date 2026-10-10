@@ -1,0 +1,1 @@
+source_record_id,payment_id,order_id,customer_id,payment_timestamp,payment_method,payment_status,amount,currency_code,transaction_reference,created_at,updated_at

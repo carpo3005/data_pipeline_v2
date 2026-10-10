@@ -1,0 +1,111 @@
+entity,ordinal_position,column_name,source_representation,business_key,sample_value
+customer,1,source_record_id,STRING/CSV text,N,SRC_CUSTOMER_B001_000000001
+customer,2,customer_id,STRING/CSV text,Y,C0000001
+customer,3,first_name,STRING/CSV text,N,Ruth
+customer,4,last_name,STRING/CSV text,N,Wilkinson
+customer,5,email,STRING/CSV text,N,ruth.wilkinson.1@retailverse.example
+customer,6,phone,STRING/CSV text,N,+44 7089250953
+customer,7,date_of_birth,STRING/CSV text,N,1976-05-11
+customer,8,loyalty_status,STRING/CSV text,N,SILVER
+customer,9,marketing_opt_in,STRING/CSV text,N,Y
+customer,10,created_at,STRING/CSV text,N,2023-07-03 10:41:57
+customer,11,updated_at,STRING/CSV text,N,2023-08-31 10:41:57
+address,1,source_record_id,STRING/CSV text,N,SRC_ADDRESS_B001_000000001
+address,2,address_id,STRING/CSV text,Y,A00000001
+address,3,customer_id,STRING/CSV text,N,C0000001
+address,4,address_type,STRING/CSV text,N,HOME
+address,5,address_line_1,STRING/CSV text,N,83 The Crescent
+address,6,address_line_2,STRING/CSV text,N,Flat 35
+address,7,city,STRING/CSV text,N,Cardiff
+address,8,state_region,STRING/CSV text,N,Wales
+address,9,postal_code,STRING/CSV text,N,G48 1AA
+address,10,country_code,STRING/CSV text,N,GB
+address,11,is_primary,STRING/CSV text,N,Y
+address,12,created_at,STRING/CSV text,N,2023-07-03 10:41:57
+address,13,updated_at,STRING/CSV text,N,2023-09-03 10:41:57
+product,1,source_record_id,STRING/CSV text,N,SRC_PRODUCT_B001_000000001
+product,2,product_id,STRING/CSV text,Y,P000001
+product,3,sku,STRING/CSV text,N,RV-000001
+product,4,product_name,STRING/CSV text,N,Everyday Headphones 0001
+product,5,brand,STRING/CSV text,N,Meridian
+product,6,unit_price,STRING/CSV text,N,339.35
+product,7,currency_code,STRING/CSV text,N,GBP
+product,8,is_active,STRING/CSV text,N,Y
+product,9,created_at,STRING/CSV text,N,2026-04-19 05:32:32
+product,10,updated_at,STRING/CSV text,N,2026-04-22 05:32:32
+category,1,source_record_id,STRING/CSV text,N,SRC_CATEGORY_B001_000000001
+category,2,category_id,STRING/CSV text,Y,CAT0001
+category,3,parent_category_id,STRING/CSV text,N,"Series([], Name: parent_category_id, dtype: str)"
+category,4,category_name,STRING/CSV text,N,Electronics
+category,5,category_code,STRING/CSV text,N,CAT-0001
+category,6,is_active,STRING/CSV text,N,Y
+category,7,created_at,STRING/CSV text,N,2023-01-01 00:00:00
+category,8,updated_at,STRING/CSV text,N,2023-01-01 00:00:00
+product_category,1,source_record_id,STRING/CSV text,N,SRC_PRODUCT_CATEGORY_B001_000000001
+product_category,2,product_category_id,STRING/CSV text,Y,PC00000001
+product_category,3,product_id,STRING/CSV text,N,P000001
+product_category,4,category_id,STRING/CSV text,N,CAT0006
+product_category,5,is_primary,STRING/CSV text,N,Y
+product_category,6,active_from,STRING/CSV text,N,2026-04-19
+product_category,7,active_to,STRING/CSV text,N,"Series([], Name: active_to, dtype: str)"
+product_category,8,created_at,STRING/CSV text,N,2026-04-19 05:32:32
+product_category,9,updated_at,STRING/CSV text,N,2026-04-19 05:32:32
+order,1,source_record_id,STRING/CSV text,N,SRC_ORDER_B001_000000001
+order,2,order_id,STRING/CSV text,Y,O000000001
+order,3,customer_id,STRING/CSV text,N,C0000002
+order,4,billing_address_id,STRING/CSV text,N,A00000002
+order,5,shipping_address_id,STRING/CSV text,N,A00000002
+order,6,order_timestamp,STRING/CSV text,N,2026-01-04 04:08:35
+order,7,channel,STRING/CSV text,N,STORE
+order,8,order_status,STRING/CSV text,N,COMPLETED
+order,9,currency_code,STRING/CSV text,N,GBP
+order,10,subtotal_amount,STRING/CSV text,N,3776.07
+order,11,discount_amount,STRING/CSV text,N,272.22
+order,12,tax_amount,STRING/CSV text,N,700.77
+order,13,shipping_amount,STRING/CSV text,N,0.00
+order,14,order_total_amount,STRING/CSV text,N,4204.62
+order,15,created_at,STRING/CSV text,N,2026-01-04 04:08:35
+order,16,updated_at,STRING/CSV text,N,2026-01-04 04:30:48
+order_item,1,source_record_id,STRING/CSV text,N,SRC_ORDER_ITEM_B001_000000001
+order_item,2,order_item_id,STRING/CSV text,Y,OI0000000001
+order_item,3,order_id,STRING/CSV text,N,O000000001
+order_item,4,product_id,STRING/CSV text,N,P000018
+order_item,5,quantity,STRING/CSV text,N,2
+order_item,6,unit_price,STRING/CSV text,N,100.71
+order_item,7,discount_amount,STRING/CSV text,N,10.07
+order_item,8,tax_amount,STRING/CSV text,N,38.27
+order_item,9,line_total_amount,STRING/CSV text,N,229.62
+order_item,10,created_at,STRING/CSV text,N,2026-01-04 04:08:35
+order_item,11,updated_at,STRING/CSV text,N,2026-01-04 04:08:35
+payment,1,source_record_id,STRING/CSV text,N,SRC_PAYMENT_B001_000000001
+payment,2,payment_id,STRING/CSV text,Y,PAY0000000001
+payment,3,order_id,STRING/CSV text,N,O000000001
+payment,4,customer_id,STRING/CSV text,N,C0000002
+payment,5,payment_timestamp,STRING/CSV text,N,2026-01-04 04:14:55
+payment,6,payment_method,STRING/CSV text,N,GIFT_CARD
+payment,7,payment_status,STRING/CSV text,N,CAPTURED
+payment,8,amount,STRING/CSV text,N,4204.62
+payment,9,currency_code,STRING/CSV text,N,GBP
+payment,10,transaction_reference,STRING/CSV text,N,TXN-B001-000000000001
+payment,11,created_at,STRING/CSV text,N,2026-01-04 04:14:55
+payment,12,updated_at,STRING/CSV text,N,2026-01-04 04:14:55
+return,1,source_record_id,STRING/CSV text,N,SRC_RETURN_B001_000000001
+return,2,return_id,STRING/CSV text,Y,R000000001
+return,3,order_id,STRING/CSV text,N,O000000455
+return,4,customer_id,STRING/CSV text,N,C0000014
+return,5,return_timestamp,STRING/CSV text,N,2025-08-29 18:11:36
+return,6,return_status,STRING/CSV text,N,COMPLETED
+return,7,return_reason,STRING/CSV text,N,UNWANTED
+return,8,total_refund_amount,STRING/CSV text,N,449.71
+return,9,created_at,STRING/CSV text,N,2025-08-29 18:11:36
+return,10,updated_at,STRING/CSV text,N,2025-08-29 18:11:36
+return_item,1,source_record_id,STRING/CSV text,N,SRC_RETURN_ITEM_B001_000000001
+return_item,2,return_item_id,STRING/CSV text,Y,RI0000000001
+return_item,3,return_id,STRING/CSV text,N,R000000053
+return_item,4,order_item_id,STRING/CSV text,N,OI0000000036
+return_item,5,product_id,STRING/CSV text,N,P000120
+return_item,6,quantity,STRING/CSV text,N,1
+return_item,7,refund_amount,STRING/CSV text,N,432.90
+return_item,8,return_reason,STRING/CSV text,N,DEFECTIVE
+return_item,9,created_at,STRING/CSV text,N,2024-05-31 02:27:12
+return_item,10,updated_at,STRING/CSV text,N,2024-05-31 02:27:12

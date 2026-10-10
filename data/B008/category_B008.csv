@@ -1,0 +1,3 @@
+source_record_id,category_id,parent_category_id,category_name,category_code,is_active,created_at,updated_at,display_order
+SRC_CATEGORY_B008_000000001,CAT0009,CAT0004,New Category 9,CAT-0009,Y,2026-09-10 00:00:00,2026-09-10 00:00:00,1
+SRC_CATEGORY_B008_000000002,CAT0010,CAT0002,New Category 10,CAT-0010,Y,2026-09-10 00:00:00,2026-09-10 00:00:00,2

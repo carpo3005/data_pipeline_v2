@@ -1,0 +1,1 @@
+source_record_id,order_id,customer_id,billing_address_id,shipping_address_id,order_timestamp,channel,order_status,currency_code,subtotal_amount,discount_amount,tax_amount,shipping_amount,order_total_amount,created_at,updated_at
