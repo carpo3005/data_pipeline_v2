@@ -38,10 +38,12 @@ def _create_spark_local(app_name: str = "data_pipeline", warehouse_path: Path = 
         .config("spark.sql.session.timeZone", "UTC")
         .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension")
         .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")
-        .config("spark.sql.warehouse.dir", warehouse_path.as_uri())
+        # FIX 1: Use as_posix() instead of as_uri() to avoid protocol parsing errors
+        .config("spark.sql.warehouse.dir", warehouse_path.as_posix())
         .config(
             "javax.jdo.option.ConnectionURL",
-            f"jdbc:derby:;databaseName={metastore_path};create=true",
+            # FIX 2: Use as_posix() here to prevent Windows backslash escaping errors
+            f"jdbc:derby:;databaseName={metastore_path.as_posix()};create=true",
         )
         .enableHiveSupport()
     )
