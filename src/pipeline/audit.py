@@ -1,9 +1,15 @@
 from __future__ import annotations
 
+import json
 import uuid
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from typing import Callable
+
+from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType, StructField, StringType, TimestampType
+
+from pipeline.writer import append_table
 
 Metric = int | float | str
 Sink = Callable[["AuditRecord"], None]
@@ -60,16 +66,20 @@ class AuditRun:
         else:
             self.record.status = "failed"
             self.record.error_message = str(exc)
-        self._sink(self.record)
+        try:
+            self._sink(self.record)
+        except Exception as sink_exc:
+            if exc is None:
+                raise
+            # Keep the run's own error as the one raised; record the sink failure on it
+            exc.add_note(f"Audit sink also failed: {type(sink_exc).__name__}: {sink_exc}")
         return False  # never swallow the exception
 
-import json
-from dataclasses import asdict
 
-from pyspark.sql import SparkSession
-from pyspark.sql.types import StructType, StructField, StringType, TimestampType
+# --------------------------------------------------------------------------------
+# Sinks
+# --------------------------------------------------------------------------------
 
-from pipeline.writer import append_table
 
 AUDIT_SCHEMA = StructType([
     StructField("run_id", StringType(), False),
@@ -91,4 +101,12 @@ def make_delta_sink(spark: SparkSession, table_fqn: str) -> Sink:
         row["metrics"] = json.dumps(row["metrics"])
         df = spark.createDataFrame([row], schema=AUDIT_SCHEMA)
         append_table(df, table_fqn)
+    return sink
+
+
+def combine_sinks(*sinks: Sink) -> Sink:
+    """Return a sink that sends each record to every sink in order."""
+    def sink(record: AuditRecord) -> None:
+        for s in sinks:
+            s(record)
     return sink

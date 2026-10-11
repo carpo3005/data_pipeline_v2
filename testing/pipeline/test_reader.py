@@ -34,6 +34,26 @@ def test_read_source_csv(spark: SparkSession, tmp_path):
     assert df.columns == COLUMNS
     assert df.collect() == expected
 
+def test_read_source_csv_options_override_defaults(spark: SparkSession, tmp_path):
+    csv_file = tmp_path / "address_B001.csv"
+    csv_file.write_text(
+        "|".join(COLUMNS) + "\n"
+        "SRC_1|A1|C1"
+    )
+
+    df = read_source_csv(spark, SCHEMA, str(csv_file), options={"delimiter": "|"})
+
+    assert df.collect() == [Row(source_record_id="SRC_1", address_id="A1", customer_id="C1")]
+
+def test_read_source_csv_adds_file_path_column(spark: SparkSession, tmp_path):
+    csv_file = tmp_path / "address_B001.csv"
+    csv_file.write_text(",".join(COLUMNS) + "\n" "SRC_1,A1,C1")
+
+    df = read_source_csv(spark, SCHEMA, str(csv_file), file_path_column="_source_file")
+
+    assert df.columns == COLUMNS + ["_source_file"]
+    assert df.first()._source_file.endswith("address_B001.csv")
+
 def test_read_table(spark: SparkSession, sample_df: DataFrame):
     schema = "bronze"
     catalog = "forge"

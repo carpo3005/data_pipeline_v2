@@ -3,7 +3,7 @@ import json
 import pytest
 from pyspark.sql import SparkSession
 
-from pipeline.audit import AuditRecord, AuditRun, make_delta_sink
+from pipeline.audit import AuditRecord, AuditRun, combine_sinks, make_delta_sink
 from pipeline.catalog import ensure_schema_exists, get_table_fqn, get_schema_fqn
 
 CATALOG = "forge"
@@ -27,6 +27,31 @@ def test_failure_records_error_and_reraises():
             raise ValueError("boom")
     assert records[0].status == "failed"
     assert records[0].error_message == "boom"
+
+
+def _failing_sink(record: AuditRecord) -> None:
+    raise RuntimeError("sink down")
+
+
+def test_failing_sink_does_not_mask_run_error():
+    with pytest.raises(ValueError, match="boom") as info:
+        with AuditRun("bronze", "customer", "t", sink=_failing_sink):
+            raise ValueError("boom")
+    assert "Audit sink also failed: RuntimeError: sink down" in info.value.__notes__
+
+
+def test_failing_sink_raises_when_run_succeeded():
+    with pytest.raises(RuntimeError, match="sink down"):
+        with AuditRun("bronze", "customer", "t", sink=_failing_sink):
+            pass
+
+
+def test_combine_sinks_sends_record_to_every_sink():
+    first, second = [], []
+    with AuditRun("bronze", "customer", "t", sink=combine_sinks(first.append, second.append)):
+        pass
+    assert len(first) == 1
+    assert first == second
 
 
 # --------------------------------------------------------------------------------
