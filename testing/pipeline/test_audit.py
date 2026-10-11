@@ -3,8 +3,10 @@ import json
 import pytest
 from pyspark.sql import SparkSession
 
+from pipeline import events
 from pipeline.audit import AuditRecord, AuditRun, combine_sinks, make_delta_sink
 from pipeline.catalog import ensure_schema_exists, get_table_fqn, get_schema_fqn
+from pipeline.events import EventBus
 
 CATALOG = "forge"
 TEST_SCHEMA = "test_audit"
@@ -44,6 +46,39 @@ def test_failing_sink_raises_when_run_succeeded():
     with pytest.raises(RuntimeError, match="sink down"):
         with AuditRun("bronze", "customer", "t", sink=_failing_sink):
             pass
+
+
+def test_run_publishes_started_and_succeeded_events():
+    bus = EventBus()
+    seen = []
+    bus.subscribe(seen.append)
+    with AuditRun("bronze", "customer", "t", sink=lambda r: None, bus=bus) as run:
+        pass
+    assert [e.name for e in seen] == [events.RUN_STARTED, events.RUN_SUCCEEDED]
+    assert seen[1].payload["record"] is run.record
+    assert run.record.status == "success"
+
+
+def test_run_publishes_failed_event_and_reraises():
+    bus = EventBus()
+    seen = []
+    bus.subscribe(seen.append, names=[events.RUN_FAILED])
+    with pytest.raises(ValueError, match="boom"):
+        with AuditRun("bronze", "customer", "t", sink=lambda r: None, bus=bus):
+            raise ValueError("boom")
+    assert seen[0].payload["record"].error_message == "boom"
+
+
+def test_failing_subscriber_does_not_mask_run_error():
+    bus = EventBus()
+
+    def broken(event):
+        raise RuntimeError("observer down")
+
+    bus.subscribe(broken)
+    with pytest.raises(ValueError, match="boom"):
+        with AuditRun("bronze", "customer", "t", sink=lambda r: None, bus=bus):
+            raise ValueError("boom")
 
 
 def test_combine_sinks_sends_record_to_every_sink():

@@ -1,5 +1,11 @@
+import time
 from contextlib import contextmanager
-from typing import Any, Iterator
+from typing import TYPE_CHECKING, Any, Iterator
+
+from pipeline import events
+
+if TYPE_CHECKING:
+    from pipeline.events import EventBus
 
 
 class PipelineError(Exception):
@@ -22,17 +28,35 @@ def _summarise(exc: BaseException) -> str:
 
 
 @contextmanager
-def step(name: str, **context: Any) -> Iterator[None]:
-    """Wrap a block so any failure is raised as a PipelineError naming the step and its context."""
+def step(name: str, bus: EventBus | None = None, **context: Any) -> Iterator[None]:
+    """Wrap a block so any failure is raised as a PipelineError naming the step and its context.
+
+    If bus is given, publishes step_started, then step_completed or step_failed.
+    """
+    if bus is not None:
+        bus.publish(events.STEP_STARTED, step=name, context=context)
+    started = time.perf_counter()
     try:
         yield
-    except PipelineError:
+    except PipelineError as exc:
+        if bus is not None:
+            bus.publish(events.STEP_FAILED, step=name, context=context, error=_summarise(exc))
         raise
     except Exception as exc:
         details = ", ".join(f"{k}={v}" for k, v in context.items())
         where = f" ({details})" if details else ""
+        summary = _summarise(exc)
+        if bus is not None:
+            bus.publish(events.STEP_FAILED, step=name, context=context, error=summary)
         raise PipelineError(
-            f"Step '{name}' failed{where}: {_summarise(exc)}",
+            f"Step '{name}' failed{where}: {summary}",
             step=name,
             context=context,
         ) from exc
+    if bus is not None:
+        bus.publish(
+            events.STEP_COMPLETED,
+            step=name,
+            context=context,
+            duration_seconds=time.perf_counter() - started,
+        )

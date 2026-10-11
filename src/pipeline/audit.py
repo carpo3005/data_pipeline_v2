@@ -9,6 +9,8 @@ from typing import Callable
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, StringType, TimestampType
 
+from pipeline import events
+from pipeline.events import EventBus
 from pipeline.writer import append_table
 
 Metric = int | float | str
@@ -42,8 +44,10 @@ class AuditRun:
         target_table: str,
         sink: Sink,
         run_id: str | None = None,
+        bus: EventBus | None = None,
     ):
         self._sink = sink
+        self._bus = bus
         self.record = AuditRecord(
             run_id=run_id or str(uuid.uuid4()),
             stage=stage,
@@ -57,6 +61,8 @@ class AuditRun:
         self.record.metrics[name] = value
 
     def __enter__(self) -> AuditRun:
+        if self._bus is not None:
+            self._bus.publish(events.RUN_STARTED, record=self.record)
         return self
 
     def __exit__(self, exc_type, exc, tb) -> bool:
@@ -73,6 +79,12 @@ class AuditRun:
                 raise
             # Keep the run's own error as the one raised; record the sink failure on it
             exc.add_note(f"Audit sink also failed: {type(sink_exc).__name__}: {sink_exc}")
+        finally:
+            if self._bus is not None:
+                if exc is None:
+                    self._bus.publish(events.RUN_SUCCEEDED, record=self.record)
+                else:
+                    self._bus.publish(events.RUN_FAILED, record=self.record)
         return False  # never swallow the exception
 
 
