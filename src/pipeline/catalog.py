@@ -80,6 +80,13 @@ def assert_tables_exist(
     if missing:
         raise ValueError(f"Missing tables: {', '.join(missing)}")
 
+def assert_table_exists(
+    spark: SparkSession,
+    table_fqn: str,
+) -> None:
+    if not check_table_exists(spark, table_fqn):
+        raise ValueError(f"Missing table: {table_fqn}")
+
 def assert_schema_exists(
     spark: SparkSession,
     catalog: str,
@@ -94,3 +101,26 @@ def assert_catalog_exists(
 ) -> None:
     if not check_catalog_exists(spark, catalog):
         raise ValueError(f"Missing catalog: {catalog}")
+
+# --------------------------------------------------------------------------------
+# Listers
+# --------------------------------------------------------------------------------
+
+def list_tables(spark: SparkSession, catalog: str, schema: str) -> list[str]:
+    if not check_schema_exists(spark, catalog, schema):
+        raise ValueError(f"Schema does not exist: {catalog}.{schema}")
+    schema_fqn = get_schema_fqn(catalog, schema)
+    return [t.name for t in spark.catalog.listTables(schema_fqn)]
+
+def list_schemas(spark: SparkSession, catalog: str) -> list[str]:
+    if is_databricks():
+        if not check_catalog_exists(spark, catalog):
+            raise ValueError(f"Catalog does not exist: {catalog}")
+        return [row.namespace for row in spark.sql(f"SHOW SCHEMAS IN {catalog}").collect()]
+    # Hive metastore: no catalog level, so `catalog` is ignored
+    return [db.name for db in spark.catalog.listDatabases()]
+
+def list_catalogs(spark: SparkSession) -> list[str]:
+    if is_databricks():
+        return [row.catalog for row in spark.sql("SHOW CATALOGS").collect()]
+    raise NotImplementedError("Catalog listing is only supported on Databricks.")
