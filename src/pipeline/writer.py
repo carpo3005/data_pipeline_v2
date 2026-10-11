@@ -31,6 +31,16 @@ def overwrite_table(df: DataFrame, table_fqn: str, overwrite_schema: bool = Fals
 def append_table(df: DataFrame, table_fqn: str) -> None:
     df.write.format("delta").mode("append").saveAsTable(table_fqn)
 
+def replace_table(df: DataFrame, table_fqn: str) -> None:
+    """Drop and recreate a Delta table, for disposable outputs whose schema can change between runs.
+
+    Use this instead of overwrite with overwriteSchema: a schema change there makes Delta ask the
+    Hive metastore to ALTER the table, which fails here (HiveAlterHandler) and leaves the metastore
+    with the old columns. Dropping the table deletes its data, so do not use it for tables you keep.
+    """
+    df.sparkSession.sql(f"DROP TABLE IF EXISTS {table_fqn}")
+    create_delta_table(df, table_fqn)
+
 def create_delta_table(
     df: DataFrame,
     table_fqn: str,
