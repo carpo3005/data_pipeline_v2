@@ -1,7 +1,8 @@
 # src/pipeline/config.py
-from pipeline.session import is_databricks
-
+import os
 from pathlib import Path
+
+from pipeline.session import is_databricks
 
 BRONZE_SCHEMA = "bronze"
 SILVER_SCHEMA = "silver"
@@ -17,3 +18,12 @@ else:
 # This function belongs somewhere else probably but I haven't decided where yet
 def get_csv_path(batch_id: str, entity: str) -> str:
     return f"{INPUT_ROOT}/{batch_id}/{entity}_{batch_id}.csv"
+
+EMAIL_MASK_SALT_VAR = "EMAIL_MASK_SALT"
+
+def get_email_mask_salt() -> str:
+    """Salt for the gold email hash. Set it in the environment so it is never committed. Fails if unset."""
+    salt = os.environ.get(EMAIL_MASK_SALT_VAR, "")
+    if not salt:
+        raise RuntimeError(f"Environment variable {EMAIL_MASK_SALT_VAR} is not set; gold customer load cannot hash emails")
+    return salt

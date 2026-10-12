@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from pipeline.session import get_spark_session
 
@@ -22,3 +24,11 @@ def sample_df(spark):
         ],
         ["first_name", "last_name", "age"],
     )
+
+@pytest.fixture(scope="session")
+def isolated_spark(tmp_path_factory):
+    """Spark on a throwaway warehouse, so its Derby metastore does not clash with a running notebook."""
+    warehouse = Path(tmp_path_factory.mktemp("isolated_warehouse")) / "spark-warehouse"
+    spark = get_spark_session(app_name="isolated_test", warehouse_path=warehouse)
+    yield spark
+    spark.stop()
